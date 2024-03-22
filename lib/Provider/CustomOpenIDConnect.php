@@ -38,6 +38,8 @@ class CustomOpenIDConnect extends CustomOAuth2
         $userProfile->displayName = $data->get($displayNameClaim) ?: $data->get('name') ?: $data->get('preferred_username');
         $userProfile->photoURL    = $data->get('picture');
         $userProfile->email       = $data->get('email');
+        $userProfile->data['cooperativeBehaviorMark']       = $data->get('cooperativeBehaviorMark');
+        $userProfile->data['cooperativeBehaviorMarkUpdate'] = $data->get('cooperativeBehaviorMarkUpdate');
         if (!is_string($userProfile->photoURL)) {
             $userProfile->photoURL = null;
         }

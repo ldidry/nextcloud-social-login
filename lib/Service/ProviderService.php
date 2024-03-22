@@ -597,7 +597,34 @@ class ProviderService
             }
             if (isset($profile->webSiteURL)) {
                 $updateAccount = true;
-                $account->setProperty(IAccountManager::PROPERTY_WEBSITE, $profile->webSiteURL, IAccountManager::SCOPE_PRIVATE, IAccountManager::NOT_VERIFIED);
+                $account->setProperty(IAccountManager::PROPERTY_WEBSITE, $profile->webSiteURL, IAccountManager::SCOPE_LOCAL, IAccountManager::NOT_VERIFIED);
+            }
+            if (isset($profile->data['cooperativeBehaviorMark']) && isset($profile->data['cooperativeBehaviorMarkUpdate'])) {
+                $updateAccount = true;
+                // Give $timeConstant a default value
+                $timeConstant = 180;
+                // Read value of $timeConstant from file
+                $file = '/var/www/nextcloud-data/social-login.txt';
+                if (file_exists($file) && is_readable($file)) {
+                    $timeConstant = (int)file_get_contents($file);
+                }
+                // Convert cooperativeBehaviorMark text to float
+                $behaviorMark = (float)$profile->data['cooperativeBehaviorMark'];
+                // Create a date from cooperativeBehaviorMarkUpdate
+                $behaviorMarkUpdate = date_create($profile->data['cooperativeBehaviorMarkUpdate']);
+                // Get the number of days between now and cooperativeBehaviorMarkUpdate
+                $behaviorMarkAge = date_create()->diff($behaviorMarkUpdate)->format('%a');
+                // Apply formula
+                $score = $behaviorMark * 2 ** (- $behaviorMarkAge / $timeConstant);
+                // Force showing "+" if $score is positive
+                $marker = '';
+                if ($score > 0) {
+                    $marker = '+';
+                }
+                // Format the headline as desired
+                $headline =  "Cooperative Behaviour Mark = " . $marker . number_format($score, 2, '.', ' ');
+                // Set headline of the account
+                $account->setProperty(IAccountManager::PROPERTY_HEADLINE, $headline, IAccountManager::SCOPE_LOCAL, IAccountManager::VERIFIED);
             }
             if ($updateAccount) {
                 $this->accountManager->updateAccount($account);
