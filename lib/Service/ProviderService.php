@@ -603,7 +603,7 @@ class ProviderService
                 $updateAccount = true;
                 $account->setProperty(IAccountManager::PROPERTY_BIOGRAPHY, $profile->description, IAccountManager::SCOPE_LOCAL, IAccountManager::NOT_VERIFIED);
             }
-            if (isset($profile->data['cooperativeBehaviorMark']) && isset($profile->data['cooperativeBehaviorMarkUpdate'])) {
+            if (isset($profile->data['cooperativeBehaviourMark']) && isset($profile->data['cooperativeBehaviorMarkUpdate'])) {
                 $updateAccount = true;
                 // Give $timeConstant a default value
                 $timeConstant = 180;
@@ -612,14 +612,14 @@ class ProviderService
                 if (file_exists($file) && is_readable($file)) {
                     $timeConstant = (int)file_get_contents($file);
                 }
-                // Convert cooperativeBehaviorMark text to float
-                $behaviorMark = (float)$profile->data['cooperativeBehaviorMark'];
-                // Create a date from cooperativeBehaviorMarkUpdate
-                $behaviorMarkUpdate = date_create($profile->data['cooperativeBehaviorMarkUpdate']);
-                // Get the number of days between now and cooperativeBehaviorMarkUpdate
-                $behaviorMarkAge = date_create()->diff($behaviorMarkUpdate)->format('%a');
+                // Convert cooperativeBehaviourMark text to float
+                $behaviourMark = (float)$profile->data['cooperativeBehaviourMark'];
+                // Create a date from cooperativeBehaviourMarkUpdate
+                $behaviourMarkUpdate = date_create($profile->data['cooperativeBehaviourMarkUpdate']);
+                // Get the number of days between now and cooperativeBehaviourMarkUpdate
+                $behaviourMarkAge = date_create()->diff($behaviourMarkUpdate)->format('%a');
                 // Apply formula
-                $score = $behaviorMark * 2 ** (- $behaviorMarkAge / $timeConstant);
+                $score = $behaviourMark * 2 ** (- $behaviourMarkAge / $timeConstant);
                 // Force showing "+" if $score is positive
                 $marker = '';
                 if ($score > 0) {
