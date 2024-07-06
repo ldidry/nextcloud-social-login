@@ -599,6 +599,10 @@ class ProviderService
                 $updateAccount = true;
                 $account->setProperty(IAccountManager::PROPERTY_WEBSITE, $profile->webSiteURL, IAccountManager::SCOPE_LOCAL, IAccountManager::NOT_VERIFIED);
             }
+            if (isset($profile->description)) {
+                $updateAccount = true;
+                $account->setProperty(IAccountManager::PROPERTY_BIOGRAPHY, $profile->description, IAccountManager::SCOPE_LOCAL, IAccountManager::NOT_VERIFIED);
+            }
             if (isset($profile->data['cooperativeBehaviorMark']) && isset($profile->data['cooperativeBehaviorMarkUpdate'])) {
                 $updateAccount = true;
                 // Give $timeConstant a default value
